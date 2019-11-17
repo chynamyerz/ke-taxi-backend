@@ -101,12 +101,31 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type UserOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+export type Role = "ADMIN" | "DRIVER" | "PASSANGER";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "cell_ASC"
+  | "cell_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "image_ASC"
+  | "image_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "oneTimePin_ASC"
+  | "oneTimePin_DESC"
+  | "oneTimePinExpiry_ASC"
+  | "oneTimePinExpiry_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
+  email?: Maybe<String>;
 }>;
 
 export interface UserWhereInput {
@@ -124,6 +143,48 @@ export interface UserWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  cell?: Maybe<String>;
+  cell_not?: Maybe<String>;
+  cell_in?: Maybe<String[] | String>;
+  cell_not_in?: Maybe<String[] | String>;
+  cell_lt?: Maybe<String>;
+  cell_lte?: Maybe<String>;
+  cell_gt?: Maybe<String>;
+  cell_gte?: Maybe<String>;
+  cell_contains?: Maybe<String>;
+  cell_not_contains?: Maybe<String>;
+  cell_starts_with?: Maybe<String>;
+  cell_not_starts_with?: Maybe<String>;
+  cell_ends_with?: Maybe<String>;
+  cell_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  image?: Maybe<String>;
+  image_not?: Maybe<String>;
+  image_in?: Maybe<String[] | String>;
+  image_not_in?: Maybe<String[] | String>;
+  image_lt?: Maybe<String>;
+  image_lte?: Maybe<String>;
+  image_gt?: Maybe<String>;
+  image_gte?: Maybe<String>;
+  image_contains?: Maybe<String>;
+  image_not_contains?: Maybe<String>;
+  image_starts_with?: Maybe<String>;
+  image_not_starts_with?: Maybe<String>;
+  image_ends_with?: Maybe<String>;
+  image_not_ends_with?: Maybe<String>;
   name?: Maybe<String>;
   name_not?: Maybe<String>;
   name_in?: Maybe<String[] | String>;
@@ -138,6 +199,42 @@ export interface UserWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  oneTimePin?: Maybe<String>;
+  oneTimePin_not?: Maybe<String>;
+  oneTimePin_in?: Maybe<String[] | String>;
+  oneTimePin_not_in?: Maybe<String[] | String>;
+  oneTimePin_lt?: Maybe<String>;
+  oneTimePin_lte?: Maybe<String>;
+  oneTimePin_gt?: Maybe<String>;
+  oneTimePin_gte?: Maybe<String>;
+  oneTimePin_contains?: Maybe<String>;
+  oneTimePin_not_contains?: Maybe<String>;
+  oneTimePin_starts_with?: Maybe<String>;
+  oneTimePin_not_starts_with?: Maybe<String>;
+  oneTimePin_ends_with?: Maybe<String>;
+  oneTimePin_not_ends_with?: Maybe<String>;
+  oneTimePinExpiry?: Maybe<DateTimeInput>;
+  oneTimePinExpiry_not?: Maybe<DateTimeInput>;
+  oneTimePinExpiry_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  oneTimePinExpiry_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  oneTimePinExpiry_lt?: Maybe<DateTimeInput>;
+  oneTimePinExpiry_lte?: Maybe<DateTimeInput>;
+  oneTimePinExpiry_gt?: Maybe<DateTimeInput>;
+  oneTimePinExpiry_gte?: Maybe<DateTimeInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
@@ -145,15 +242,44 @@ export interface UserWhereInput {
 
 export interface UserCreateInput {
   id?: Maybe<ID_Input>;
+  cell: String;
+  email: String;
+  image?: Maybe<String>;
   name: String;
+  password: String;
+  oneTimePin?: Maybe<String>;
+  oneTimePinExpiry?: Maybe<DateTimeInput>;
+  role?: Maybe<UserCreateroleInput>;
+}
+
+export interface UserCreateroleInput {
+  set?: Maybe<Role[] | Role>;
 }
 
 export interface UserUpdateInput {
+  cell?: Maybe<String>;
+  email?: Maybe<String>;
+  image?: Maybe<String>;
   name?: Maybe<String>;
+  password?: Maybe<String>;
+  oneTimePin?: Maybe<String>;
+  oneTimePinExpiry?: Maybe<DateTimeInput>;
+  role?: Maybe<UserUpdateroleInput>;
+}
+
+export interface UserUpdateroleInput {
+  set?: Maybe<Role[] | Role>;
 }
 
 export interface UserUpdateManyMutationInput {
+  cell?: Maybe<String>;
+  email?: Maybe<String>;
+  image?: Maybe<String>;
   name?: Maybe<String>;
+  password?: Maybe<String>;
+  oneTimePin?: Maybe<String>;
+  oneTimePinExpiry?: Maybe<DateTimeInput>;
+  role?: Maybe<UserUpdateroleInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -173,26 +299,54 @@ export interface NodeNode {
 
 export interface User {
   id: ID_Output;
+  cell: String;
+  email: String;
+  image?: String;
   name: String;
+  password: String;
+  oneTimePin?: String;
+  oneTimePinExpiry?: DateTimeOutput;
+  role: Role[];
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
+  cell: () => Promise<String>;
+  email: () => Promise<String>;
+  image: () => Promise<String>;
   name: () => Promise<String>;
+  password: () => Promise<String>;
+  oneTimePin: () => Promise<String>;
+  oneTimePinExpiry: () => Promise<DateTimeOutput>;
+  role: () => Promise<Role[]>;
 }
 
 export interface UserSubscription
   extends Promise<AsyncIterator<User>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  cell: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  oneTimePin: () => Promise<AsyncIterator<String>>;
+  oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
+  role: () => Promise<AsyncIterator<Role[]>>;
 }
 
 export interface UserNullablePromise
   extends Promise<User | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  cell: () => Promise<String>;
+  email: () => Promise<String>;
+  image: () => Promise<String>;
   name: () => Promise<String>;
+  password: () => Promise<String>;
+  oneTimePin: () => Promise<String>;
+  oneTimePinExpiry: () => Promise<DateTimeOutput>;
+  role: () => Promise<Role[]>;
 }
 
 export interface UserConnection {
@@ -315,21 +469,42 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface UserPreviousValues {
   id: ID_Output;
+  cell: String;
+  email: String;
+  image?: String;
   name: String;
+  password: String;
+  oneTimePin?: String;
+  oneTimePinExpiry?: DateTimeOutput;
+  role: Role[];
 }
 
 export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  cell: () => Promise<String>;
+  email: () => Promise<String>;
+  image: () => Promise<String>;
   name: () => Promise<String>;
+  password: () => Promise<String>;
+  oneTimePin: () => Promise<String>;
+  oneTimePinExpiry: () => Promise<DateTimeOutput>;
+  role: () => Promise<Role[]>;
 }
 
 export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  cell: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  oneTimePin: () => Promise<AsyncIterator<String>>;
+  oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
+  role: () => Promise<AsyncIterator<Role[]>>;
 }
 
 /*
@@ -342,6 +517,16 @@ export type ID_Output = string;
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+DateTime scalar input type, allowing Date
+*/
+export type DateTimeInput = Date | string;
+
+/*
+DateTime scalar output type, which is always a string
+*/
+export type DateTimeOutput = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
@@ -362,6 +547,10 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Role",
     embedded: false
   }
 ];

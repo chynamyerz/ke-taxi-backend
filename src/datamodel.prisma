@@ -1,4 +1,17 @@
 type User {
   id: ID! @id
+  cell: String!
+  email: String! @unique
+  image: String
   name: String!
+  password: String!
+  oneTimePin: String
+  oneTimePinExpiry: DateTime
+  role: [Role!]!  @scalarList(strategy: RELATION)
+}
+
+enum Role {
+  ADMIN
+  DRIVER
+  PASSANGER
 }
