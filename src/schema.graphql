@@ -1,13 +1,70 @@
+"""
+The schema's root query type.
+"""
 type Query {
-  user(id: ID!): User
-  users(limit: Int): [User]!
+  """
+  Returns the currently logged in user, null if the user is not logged in.
+  """
+  user: User
+
+  """
+  Returns the list of users regstered.
+  """
+  users: [User!]!
 }
 
+"""
+The schema's root mutation type.
+"""
 type Mutation {
-  addUser(name: String!): User!
+  """
+  Adds the newly created user when valid information provided,
+  An email address should not exist already.
+
+  parameters
+    email:
+      User's email address
+    name:
+      User's name
+    cell:
+      User's cell number
+      State (province) zip code
+    password:
+      User's password
+
+  Returns the SuccessMessage
+  """
+  signup(
+    """
+    User's email address
+    """
+    email: String!
+    """
+    User's name
+    """
+    name: String!
+    """
+    User's cell number
+    """
+    cell: String!
+    """
+    User's password
+    """
+    password: String!
+  ): User!
 }
 
 type User {
   id: ID!
+  cell: String!
+  email: String!
+  image: String
   name: String!
+  role: [Role!]!
+}
+
+enum Role {
+  ADMIN
+  DRIVER
+  PASSANGER
 }

@@ -1,12 +1,60 @@
-import { Prisma } from "../generated/prisma-client";
+import bcrypt from "bcrypt";
+import { Prisma, UserCreateInput } from "../generated/prisma-client";
+import { validateEmail, validPassword } from "../util";
 
-// Defining  Mutation methods
+interface IContext {
+  prisma: Prisma;
+  user: { id: string };
+}
+
+/**
+ * The main Mutation object
+ */
 const Mutation = {
-  // Mutation for creating the user
-  async addUser(root: any, args: any, ctx: { prisma: Prisma }) {
-    return ctx.prisma.createUser({
-      name: args.name
-    });
+  /**
+   * Register a new user
+   *
+   * @param root root
+   * @param args arguments
+   * @param ctx context
+   *
+   * Return the success message
+   */
+  async signup(root: any, args: UserCreateInput, ctx: IContext) {
+    try {
+      // Transform email address to lowercase.
+      args.email = args.email.trim().toLowerCase();
+
+      // Validate the submitted email address
+      if (!validateEmail(args.email)) {
+        throw Error("The email address is invalid");
+      }
+
+      // Check if the submitted email for registering already exists.
+      if (await ctx.prisma.user({ email: args.email })) {
+        throw Error("Email address already exists.");
+      }
+
+      // Check if the submitted password is valid
+      if (!validPassword(args.password)) {
+        throw Error("Password must be at least 5 characters long.");
+      }
+
+      // Hash password before stored in the database.
+      const password = await bcrypt.hash(args.password, 10);
+
+      return await ctx.prisma.createUser({
+        cell: args.cell,
+        email: args.email,
+        name: args.name,
+        password,
+        role: {
+          set: "PASSANGER"
+        }
+      });
+    } catch (e) {
+      throw Error(e.message);
+    }
   }
 };
 

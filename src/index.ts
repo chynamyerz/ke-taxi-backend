@@ -1,20 +1,18 @@
-import { GraphQLServer } from "graphql-yoga";
-import { prisma } from "./generated/prisma-client";
-import resolvers from "./resolvers";
+import createServer from "./createServer";
 
-// Creating server options
-const serverOptions = {
-  context: {
-    prisma
-  },
-  resolvers,
-  typeDefs: "./src/schema.graphql"
+const launchServer = async () => {
+  // Instatiate the server
+  const server = createServer();
+
+  const opts: any = {
+    cors: {
+      credentials: true,
+      origin: [process.env.KE_TAXI_FRONTEND_HOST]
+    }
+  };
+
+  // Start the server with CORS enabled
+  (await server).start(opts);
 };
 
-// Instatiating GraphQL-Yoga server
-const server = new GraphQLServer(serverOptions);
-
-// Starting the server
-server.start();
-
-export { server };
+launchServer();
