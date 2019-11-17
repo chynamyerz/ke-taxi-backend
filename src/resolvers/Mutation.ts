@@ -43,7 +43,7 @@ const Mutation = {
       // Hash password before stored in the database.
       const password = await bcrypt.hash(args.password, 10);
 
-      await ctx.prisma.createUser({
+      return await ctx.prisma.createUser({
         cell: args.cell,
         email: args.email,
         name: args.name,
@@ -52,8 +52,6 @@ const Mutation = {
           set: "PASSANGER"
         }
       });
-
-      return { message: "Registered successfully" };
     } catch (e) {
       throw Error(e.message);
     }

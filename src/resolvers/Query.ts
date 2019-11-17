@@ -25,7 +25,7 @@ const Query = {
       return null;
     }
     try {
-      return ctx.prisma.user({ id: ctx.user.id }).$fragment(userProperties);
+      return ctx.prisma.user({ id: ctx.user.id });
     } catch (e) {
       throw Error(e.message);
     }
@@ -42,7 +42,7 @@ const Query = {
    */
   async users(root: any, args: any, ctx: IContext) {
     try {
-      return ctx.prisma.users().$fragment(userProperties);
+      return ctx.prisma.users();
     } catch (e) {
       throw Error(e.message);
     }
