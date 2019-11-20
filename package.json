@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "cd src/; prisma deploy",
-    "dev": "nodemon -e ts,graphql -x ts-node src/index.ts",
+    "dev": "nodemon -e ts,graphql -x ts-node -r dotenv/config src/index.ts",
     "start": "ts-node -r dotenv/config src/index.ts",
     "test": "jest",
     "format": "prettier --write 'src/**/*.{js,ts,tsx,json,graphql}'",
