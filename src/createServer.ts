@@ -17,6 +17,12 @@ const createServer = async () => {
       async (email, password, done) => {
         // Only retrieving a user with the submitted email address.
         const user = await prisma.user({ email });
+        console.log(
+          email,
+          password,
+          user,
+          user && (await bcrypt.compare(password, user.password))
+        );
         // Check if the user exist and return it content for use in subsequent requests.
         if (user && (await bcrypt.compare(password, user.password))) {
           done(null, user);
@@ -29,9 +35,9 @@ const createServer = async () => {
 
   // Create the server
   const server = new GraphQLServer({
-    context: ({ request }) => ({
+    context: req => ({
       prisma,
-      user: request.user
+      user: req.request.user
     }),
     resolvers,
     typeDefs: __dirname + "/schema.graphql"
@@ -60,8 +66,8 @@ const createServer = async () => {
       cookie: {
         httpOnly: true,
         path: "/",
-        sameSite: true,
-        secure: true
+        sameSite: false,
+        secure: false
       },
       name: "connect.sid",
       proxy: true,

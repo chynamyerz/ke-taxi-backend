@@ -20,10 +20,12 @@ const Query = {
    * Returns the user information
    */
   async user(root: any, args: any, ctx: IContext) {
+    console.log(ctx.user);
     // Check if user is looged in.
     if (!ctx.user) {
       return null;
     }
+    console.log(ctx.user.id);
     try {
       return ctx.prisma.user({ id: ctx.user.id });
     } catch (e) {
