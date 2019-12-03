@@ -28,7 +28,6 @@ type Mutation {
       User's name
     cell:
       User's cell number
-      State (province) zip code
     password:
       User's password
 
@@ -52,6 +51,34 @@ type Mutation {
     """
     password: String!
   ): User!
+
+  """
+  Updates the user information when valid information provided,
+  The username or an email address should not exist already.
+
+  parameters
+    cell:
+      User's contact number
+    email:
+      User's email address
+    image:
+      User's url for the profile image
+    name:
+      User's name
+    password:
+      User's current password
+    newpassword:
+      User's new password
+  Returns the SuccessMessage
+  """
+  updateUser(
+    cell: String
+    email: String
+    image: String
+    name: String
+    password: String!
+    newPassword: String
+  ): User!
 }
 
 type User {
@@ -60,7 +87,7 @@ type User {
   email: String!
   image: String
   name: String!
-  role: [Role!]!
+  roles: [Role!]!
 }
 
 enum Role {

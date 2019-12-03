@@ -3,5 +3,5 @@ export const userProperties = `
   email
   name
   cell
-  role
+  roles
 `;

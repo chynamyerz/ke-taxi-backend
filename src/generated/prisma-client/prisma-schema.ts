@@ -66,7 +66,7 @@ type User {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: [Role!]!
+  roles: [Role!]!
 }
 
 type UserConnection {
@@ -84,10 +84,10 @@ input UserCreateInput {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: UserCreateroleInput
+  roles: UserCreaterolesInput
 }
 
-input UserCreateroleInput {
+input UserCreaterolesInput {
   set: [Role!]
 }
 
@@ -124,7 +124,7 @@ type UserPreviousValues {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: [Role!]!
+  roles: [Role!]!
 }
 
 type UserSubscriptionPayload {
@@ -153,7 +153,7 @@ input UserUpdateInput {
   password: String
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: UserUpdateroleInput
+  roles: UserUpdaterolesInput
 }
 
 input UserUpdateManyMutationInput {
@@ -164,10 +164,10 @@ input UserUpdateManyMutationInput {
   password: String
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: UserUpdateroleInput
+  roles: UserUpdaterolesInput
 }
 
-input UserUpdateroleInput {
+input UserUpdaterolesInput {
   set: [Role!]
 }
 

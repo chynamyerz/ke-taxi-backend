@@ -7,7 +7,7 @@ type User {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
-  role: [Role!]!  @scalarList(strategy: RELATION)
+  roles: [Role!]!  @scalarList(strategy: RELATION)
 }
 
 enum Role {

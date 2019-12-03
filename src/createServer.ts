@@ -17,12 +17,7 @@ const createServer = async () => {
       async (email, password, done) => {
         // Only retrieving a user with the submitted email address.
         const user = await prisma.user({ email });
-        console.log(
-          email,
-          password,
-          user,
-          user && (await bcrypt.compare(password, user.password))
-        );
+
         // Check if the user exist and return it content for use in subsequent requests.
         if (user && (await bcrypt.compare(password, user.password))) {
           done(null, user);
@@ -45,7 +40,7 @@ const createServer = async () => {
   // Allow server to use the cors
   server.express.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
+    res.header("Set-Cookie", "HttpOnly; Secure; SameSite=Strict");
     res.header(
       "Access-Control-Allow-Origin",
       process.env.KE_TAXI_FRONTEND_HOST

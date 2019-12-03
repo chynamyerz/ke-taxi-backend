@@ -249,10 +249,10 @@ export interface UserCreateInput {
   password: String;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserCreateroleInput>;
+  roles?: Maybe<UserCreaterolesInput>;
 }
 
-export interface UserCreateroleInput {
+export interface UserCreaterolesInput {
   set?: Maybe<Role[] | Role>;
 }
 
@@ -264,10 +264,10 @@ export interface UserUpdateInput {
   password?: Maybe<String>;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserUpdateroleInput>;
+  roles?: Maybe<UserUpdaterolesInput>;
 }
 
-export interface UserUpdateroleInput {
+export interface UserUpdaterolesInput {
   set?: Maybe<Role[] | Role>;
 }
 
@@ -279,7 +279,7 @@ export interface UserUpdateManyMutationInput {
   password?: Maybe<String>;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserUpdateroleInput>;
+  roles?: Maybe<UserUpdaterolesInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -306,7 +306,7 @@ export interface User {
   password: String;
   oneTimePin?: String;
   oneTimePinExpiry?: DateTimeOutput;
-  role: Role[];
+  roles: Role[];
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -318,7 +318,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   password: () => Promise<String>;
   oneTimePin: () => Promise<String>;
   oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  roles: () => Promise<Role[]>;
 }
 
 export interface UserSubscription
@@ -332,7 +332,7 @@ export interface UserSubscription
   password: () => Promise<AsyncIterator<String>>;
   oneTimePin: () => Promise<AsyncIterator<String>>;
   oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
-  role: () => Promise<AsyncIterator<Role[]>>;
+  roles: () => Promise<AsyncIterator<Role[]>>;
 }
 
 export interface UserNullablePromise
@@ -346,7 +346,7 @@ export interface UserNullablePromise
   password: () => Promise<String>;
   oneTimePin: () => Promise<String>;
   oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  roles: () => Promise<Role[]>;
 }
 
 export interface UserConnection {
@@ -476,7 +476,7 @@ export interface UserPreviousValues {
   password: String;
   oneTimePin?: String;
   oneTimePinExpiry?: DateTimeOutput;
-  role: Role[];
+  roles: Role[];
 }
 
 export interface UserPreviousValuesPromise
@@ -490,7 +490,7 @@ export interface UserPreviousValuesPromise
   password: () => Promise<String>;
   oneTimePin: () => Promise<String>;
   oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  roles: () => Promise<Role[]>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -504,7 +504,7 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
   oneTimePin: () => Promise<AsyncIterator<String>>;
   oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
-  role: () => Promise<AsyncIterator<Role[]>>;
+  roles: () => Promise<AsyncIterator<Role[]>>;
 }
 
 /*
