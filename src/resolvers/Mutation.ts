@@ -1,16 +1,7 @@
 import bcrypt from "bcrypt";
-import {
-  Prisma,
-  UserCreateInput,
-  UserUpdateInput
-} from "../generated/prisma-client";
+import jwt from "jsonwebtoken";
+import { UserCreateInput, UserUpdateInput } from "../generated/prisma-client";
 import { validateEmail, validPassword } from "../util";
-
-// Defining the context interface
-interface IContext {
-  prisma: Prisma;
-  user: { id: string };
-}
 
 // Defining user update interface
 interface IUserUpdate extends UserUpdateInput {
@@ -30,7 +21,7 @@ const Mutation = {
    *
    * Return the success message
    */
-  async signup(root: any, args: UserCreateInput, ctx: IContext) {
+  async signup(root: any, args: UserCreateInput, ctx: any) {
     try {
       // Transform email address to lowercase.
       args.email = args.email.trim().toLowerCase();
@@ -53,7 +44,7 @@ const Mutation = {
       // Hash password before stored in the database.
       const password = await bcrypt.hash(args.password, 10);
 
-      return await ctx.prisma.createUser({
+      const user = await ctx.prisma.createUser({
         cell: args.cell,
         email: args.email,
         name: args.name,
@@ -62,9 +53,53 @@ const Mutation = {
           set: "PASSANGER"
         }
       });
+
+      // generate the jwt token for the user
+      const token = jwt.sign(
+        {
+          user: {
+            id: user.id
+          }
+        },
+        "ke-taxi"
+      );
+
+      // return signed in user token
+      return { token };
     } catch (e) {
       throw Error(e.message);
     }
+  },
+
+  async signin(root: any, args: { email: string; password: string }, ctx: any) {
+    // check if there is a user with the provided email
+    const user = await ctx.prisma.user({
+      email: args.email
+    });
+
+    if (!user) {
+      throw new Error(`No such user found for the email ${args.email}`);
+    }
+
+    // check if the password is correct
+    const valid = await bcrypt.compare(args.password, user.password);
+
+    if (!valid) {
+      throw new Error("Invalid password");
+    }
+
+    // generate the jwt token for the user
+    const token = jwt.sign(
+      {
+        user: {
+          id: user.id
+        }
+      },
+      "ke-taxi"
+    );
+
+    // return signed in user token
+    return { token };
   },
 
   /**
@@ -76,14 +111,14 @@ const Mutation = {
    *
    * Return the success message
    */
-  async updateUser(root: any, args: IUserUpdate, ctx: IContext) {
+  async updateUser(root: any, args: IUserUpdate, ctx: any) {
     // Check if the user is logged in
-    if (!ctx.user) {
+    if (!ctx.request.user) {
       throw new Error("You must be logged in to update user information.");
     }
 
     // Logged in user information
-    const user = await ctx.prisma.user({ id: ctx.user.id });
+    const user = await ctx.prisma.user({ id: ctx.request.user.id });
 
     // Check if the user password is corrct
     if (user && !(await bcrypt.compare(args.password, user.password))) {
@@ -132,7 +167,7 @@ const Mutation = {
     return ctx.prisma.updateUser({
       data: userToUpdate,
       where: {
-        id: ctx.user.id
+        id: ctx.request.user.id
       }
     });
   }

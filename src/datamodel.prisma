@@ -7,7 +7,25 @@ type User {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
+  rides: [Ride!]!
   roles: [Role!]!  @scalarList(strategy: RELATION)
+}
+
+type Ride {
+  id: ID! @id
+  riders: Int!
+  pickUp: String!
+  dropOff: String!
+  price: Int!
+  status: RideStatus!
+}
+
+enum RideStatus {
+  REQUESTED
+  ACCEPTED
+  RIDING
+  DECLINED
+  CANCELLED
 }
 
 enum Role {

@@ -2,7 +2,11 @@
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-export const typeDefs = /* GraphQL */ `type AggregateUser {
+export const typeDefs = /* GraphQL */ `type AggregateRide {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -15,6 +19,12 @@ scalar DateTime
 scalar Long
 
 type Mutation {
+  createRide(data: RideCreateInput!): Ride!
+  updateRide(data: RideUpdateInput!, where: RideWhereUniqueInput!): Ride
+  updateManyRides(data: RideUpdateManyMutationInput!, where: RideWhereInput): BatchPayload!
+  upsertRide(where: RideWhereUniqueInput!, create: RideCreateInput!, update: RideUpdateInput!): Ride!
+  deleteRide(where: RideWhereUniqueInput!): Ride
+  deleteManyRides(where: RideWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -41,10 +51,297 @@ type PageInfo {
 }
 
 type Query {
+  ride(where: RideWhereUniqueInput!): Ride
+  rides(where: RideWhereInput, orderBy: RideOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ride]!
+  ridesConnection(where: RideWhereInput, orderBy: RideOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RideConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
+}
+
+type Ride {
+  id: ID!
+  riders: Int!
+  pickUp: String!
+  dropOff: String!
+  price: Int!
+  status: RideStatus!
+}
+
+type RideConnection {
+  pageInfo: PageInfo!
+  edges: [RideEdge]!
+  aggregate: AggregateRide!
+}
+
+input RideCreateInput {
+  id: ID
+  riders: Int!
+  pickUp: String!
+  dropOff: String!
+  price: Int!
+  status: RideStatus!
+}
+
+input RideCreateManyInput {
+  create: [RideCreateInput!]
+  connect: [RideWhereUniqueInput!]
+}
+
+type RideEdge {
+  node: Ride!
+  cursor: String!
+}
+
+enum RideOrderByInput {
+  id_ASC
+  id_DESC
+  riders_ASC
+  riders_DESC
+  pickUp_ASC
+  pickUp_DESC
+  dropOff_ASC
+  dropOff_DESC
+  price_ASC
+  price_DESC
+  status_ASC
+  status_DESC
+}
+
+type RidePreviousValues {
+  id: ID!
+  riders: Int!
+  pickUp: String!
+  dropOff: String!
+  price: Int!
+  status: RideStatus!
+}
+
+input RideScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  riders: Int
+  riders_not: Int
+  riders_in: [Int!]
+  riders_not_in: [Int!]
+  riders_lt: Int
+  riders_lte: Int
+  riders_gt: Int
+  riders_gte: Int
+  pickUp: String
+  pickUp_not: String
+  pickUp_in: [String!]
+  pickUp_not_in: [String!]
+  pickUp_lt: String
+  pickUp_lte: String
+  pickUp_gt: String
+  pickUp_gte: String
+  pickUp_contains: String
+  pickUp_not_contains: String
+  pickUp_starts_with: String
+  pickUp_not_starts_with: String
+  pickUp_ends_with: String
+  pickUp_not_ends_with: String
+  dropOff: String
+  dropOff_not: String
+  dropOff_in: [String!]
+  dropOff_not_in: [String!]
+  dropOff_lt: String
+  dropOff_lte: String
+  dropOff_gt: String
+  dropOff_gte: String
+  dropOff_contains: String
+  dropOff_not_contains: String
+  dropOff_starts_with: String
+  dropOff_not_starts_with: String
+  dropOff_ends_with: String
+  dropOff_not_ends_with: String
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  status: RideStatus
+  status_not: RideStatus
+  status_in: [RideStatus!]
+  status_not_in: [RideStatus!]
+  AND: [RideScalarWhereInput!]
+  OR: [RideScalarWhereInput!]
+  NOT: [RideScalarWhereInput!]
+}
+
+enum RideStatus {
+  REQUESTED
+  ACCEPTED
+  RIDING
+  DECLINED
+  CANCELLED
+}
+
+type RideSubscriptionPayload {
+  mutation: MutationType!
+  node: Ride
+  updatedFields: [String!]
+  previousValues: RidePreviousValues
+}
+
+input RideSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RideWhereInput
+  AND: [RideSubscriptionWhereInput!]
+  OR: [RideSubscriptionWhereInput!]
+  NOT: [RideSubscriptionWhereInput!]
+}
+
+input RideUpdateDataInput {
+  riders: Int
+  pickUp: String
+  dropOff: String
+  price: Int
+  status: RideStatus
+}
+
+input RideUpdateInput {
+  riders: Int
+  pickUp: String
+  dropOff: String
+  price: Int
+  status: RideStatus
+}
+
+input RideUpdateManyDataInput {
+  riders: Int
+  pickUp: String
+  dropOff: String
+  price: Int
+  status: RideStatus
+}
+
+input RideUpdateManyInput {
+  create: [RideCreateInput!]
+  update: [RideUpdateWithWhereUniqueNestedInput!]
+  upsert: [RideUpsertWithWhereUniqueNestedInput!]
+  delete: [RideWhereUniqueInput!]
+  connect: [RideWhereUniqueInput!]
+  set: [RideWhereUniqueInput!]
+  disconnect: [RideWhereUniqueInput!]
+  deleteMany: [RideScalarWhereInput!]
+  updateMany: [RideUpdateManyWithWhereNestedInput!]
+}
+
+input RideUpdateManyMutationInput {
+  riders: Int
+  pickUp: String
+  dropOff: String
+  price: Int
+  status: RideStatus
+}
+
+input RideUpdateManyWithWhereNestedInput {
+  where: RideScalarWhereInput!
+  data: RideUpdateManyDataInput!
+}
+
+input RideUpdateWithWhereUniqueNestedInput {
+  where: RideWhereUniqueInput!
+  data: RideUpdateDataInput!
+}
+
+input RideUpsertWithWhereUniqueNestedInput {
+  where: RideWhereUniqueInput!
+  update: RideUpdateDataInput!
+  create: RideCreateInput!
+}
+
+input RideWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  riders: Int
+  riders_not: Int
+  riders_in: [Int!]
+  riders_not_in: [Int!]
+  riders_lt: Int
+  riders_lte: Int
+  riders_gt: Int
+  riders_gte: Int
+  pickUp: String
+  pickUp_not: String
+  pickUp_in: [String!]
+  pickUp_not_in: [String!]
+  pickUp_lt: String
+  pickUp_lte: String
+  pickUp_gt: String
+  pickUp_gte: String
+  pickUp_contains: String
+  pickUp_not_contains: String
+  pickUp_starts_with: String
+  pickUp_not_starts_with: String
+  pickUp_ends_with: String
+  pickUp_not_ends_with: String
+  dropOff: String
+  dropOff_not: String
+  dropOff_in: [String!]
+  dropOff_not_in: [String!]
+  dropOff_lt: String
+  dropOff_lte: String
+  dropOff_gt: String
+  dropOff_gte: String
+  dropOff_contains: String
+  dropOff_not_contains: String
+  dropOff_starts_with: String
+  dropOff_not_starts_with: String
+  dropOff_ends_with: String
+  dropOff_not_ends_with: String
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  status: RideStatus
+  status_not: RideStatus
+  status_in: [RideStatus!]
+  status_not_in: [RideStatus!]
+  AND: [RideWhereInput!]
+  OR: [RideWhereInput!]
+  NOT: [RideWhereInput!]
+}
+
+input RideWhereUniqueInput {
+  id: ID
 }
 
 enum Role {
@@ -54,6 +351,7 @@ enum Role {
 }
 
 type Subscription {
+  ride(where: RideSubscriptionWhereInput): RideSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -66,6 +364,7 @@ type User {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
+  rides(where: RideWhereInput, orderBy: RideOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Ride!]
   roles: [Role!]!
 }
 
@@ -84,6 +383,7 @@ input UserCreateInput {
   password: String!
   oneTimePin: String
   oneTimePinExpiry: DateTime
+  rides: RideCreateManyInput
   roles: UserCreaterolesInput
 }
 
@@ -153,6 +453,7 @@ input UserUpdateInput {
   password: String
   oneTimePin: String
   oneTimePinExpiry: DateTime
+  rides: RideUpdateManyInput
   roles: UserUpdaterolesInput
 }
 
@@ -278,6 +579,9 @@ input UserWhereInput {
   oneTimePinExpiry_lte: DateTime
   oneTimePinExpiry_gt: DateTime
   oneTimePinExpiry_gte: DateTime
+  rides_every: RideWhereInput
+  rides_some: RideWhereInput
+  rides_none: RideWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
