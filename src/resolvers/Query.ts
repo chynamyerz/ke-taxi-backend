@@ -1,10 +1,4 @@
-import { Prisma } from "../generated/prisma-client";
-import { userProperties } from "../util/fragments";
-
-interface IContext {
-  prisma: Prisma;
-  user: { id: string };
-}
+import jwt from "jsonwebtoken";
 
 /**
  * The main Query object
@@ -19,15 +13,22 @@ const Query = {
    *
    * Returns the user information
    */
-  async user(root: any, args: any, ctx: IContext) {
+  async user(root: any, args: any, ctx: any) {
     // Check if user is looged in.
-    if (!ctx.user) {
+    if (!args.token) {
       return null;
     }
+
+    // Check if the token is valid
     try {
-      return ctx.prisma.user({ id: ctx.user.id });
-    } catch (e) {
-      throw Error(e.message);
+      const user = jwt.verify(args.token, "ke-taxi");
+      try {
+        return ctx.prisma.user({ id: (user as any).user.id });
+      } catch (e) {
+        throw Error(e.message);
+      }
+    } catch (err) {
+      throw new Error("You are no longer signed in.");
     }
   },
 
@@ -40,7 +41,7 @@ const Query = {
    *
    * Returns the list of users information
    */
-  async users(root: any, args: any, ctx: IContext) {
+  async users(root: any, args: any, ctx: any) {
     try {
       return ctx.prisma.users();
     } catch (e) {

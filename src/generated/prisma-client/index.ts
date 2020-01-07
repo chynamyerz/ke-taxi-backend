@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  ride: (where?: RideWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -38,6 +39,25 @@ export interface Prisma {
    * Queries
    */
 
+  ride: (where: RideWhereUniqueInput) => RideNullablePromise;
+  rides: (args?: {
+    where?: RideWhereInput;
+    orderBy?: RideOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Ride>;
+  ridesConnection: (args?: {
+    where?: RideWhereInput;
+    orderBy?: RideOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => RideConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -63,6 +83,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createRide: (data: RideCreateInput) => RidePromise;
+  updateRide: (args: {
+    data: RideUpdateInput;
+    where: RideWhereUniqueInput;
+  }) => RidePromise;
+  updateManyRides: (args: {
+    data: RideUpdateManyMutationInput;
+    where?: RideWhereInput;
+  }) => BatchPayloadPromise;
+  upsertRide: (args: {
+    where: RideWhereUniqueInput;
+    create: RideCreateInput;
+    update: RideUpdateInput;
+  }) => RidePromise;
+  deleteRide: (where: RideWhereUniqueInput) => RidePromise;
+  deleteManyRides: (where?: RideWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -88,6 +124,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  ride: (
+    where?: RideSubscriptionWhereInput
+  ) => RideSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -100,6 +139,27 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type RideStatus =
+  | "REQUESTED"
+  | "ACCEPTED"
+  | "RIDING"
+  | "DECLINED"
+  | "CANCELLED";
+
+export type RideOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "riders_ASC"
+  | "riders_DESC"
+  | "pickUp_ASC"
+  | "pickUp_DESC"
+  | "dropOff_ASC"
+  | "dropOff_DESC"
+  | "price_ASC"
+  | "price_DESC"
+  | "status_ASC"
+  | "status_DESC";
 
 export type Role = "ADMIN" | "DRIVER" | "PASSANGER";
 
@@ -122,6 +182,78 @@ export type UserOrderByInput =
   | "oneTimePinExpiry_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
+
+export type RideWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface RideWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  riders?: Maybe<Int>;
+  riders_not?: Maybe<Int>;
+  riders_in?: Maybe<Int[] | Int>;
+  riders_not_in?: Maybe<Int[] | Int>;
+  riders_lt?: Maybe<Int>;
+  riders_lte?: Maybe<Int>;
+  riders_gt?: Maybe<Int>;
+  riders_gte?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  pickUp_not?: Maybe<String>;
+  pickUp_in?: Maybe<String[] | String>;
+  pickUp_not_in?: Maybe<String[] | String>;
+  pickUp_lt?: Maybe<String>;
+  pickUp_lte?: Maybe<String>;
+  pickUp_gt?: Maybe<String>;
+  pickUp_gte?: Maybe<String>;
+  pickUp_contains?: Maybe<String>;
+  pickUp_not_contains?: Maybe<String>;
+  pickUp_starts_with?: Maybe<String>;
+  pickUp_not_starts_with?: Maybe<String>;
+  pickUp_ends_with?: Maybe<String>;
+  pickUp_not_ends_with?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  dropOff_not?: Maybe<String>;
+  dropOff_in?: Maybe<String[] | String>;
+  dropOff_not_in?: Maybe<String[] | String>;
+  dropOff_lt?: Maybe<String>;
+  dropOff_lte?: Maybe<String>;
+  dropOff_gt?: Maybe<String>;
+  dropOff_gte?: Maybe<String>;
+  dropOff_contains?: Maybe<String>;
+  dropOff_not_contains?: Maybe<String>;
+  dropOff_starts_with?: Maybe<String>;
+  dropOff_not_starts_with?: Maybe<String>;
+  dropOff_ends_with?: Maybe<String>;
+  dropOff_not_ends_with?: Maybe<String>;
+  price?: Maybe<Int>;
+  price_not?: Maybe<Int>;
+  price_in?: Maybe<Int[] | Int>;
+  price_not_in?: Maybe<Int[] | Int>;
+  price_lt?: Maybe<Int>;
+  price_lte?: Maybe<Int>;
+  price_gt?: Maybe<Int>;
+  price_gte?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
+  status_not?: Maybe<RideStatus>;
+  status_in?: Maybe<RideStatus[] | RideStatus>;
+  status_not_in?: Maybe<RideStatus[] | RideStatus>;
+  AND?: Maybe<RideWhereInput[] | RideWhereInput>;
+  OR?: Maybe<RideWhereInput[] | RideWhereInput>;
+  NOT?: Maybe<RideWhereInput[] | RideWhereInput>;
+}
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -235,9 +367,37 @@ export interface UserWhereInput {
   oneTimePinExpiry_lte?: Maybe<DateTimeInput>;
   oneTimePinExpiry_gt?: Maybe<DateTimeInput>;
   oneTimePinExpiry_gte?: Maybe<DateTimeInput>;
+  rides_every?: Maybe<RideWhereInput>;
+  rides_some?: Maybe<RideWhereInput>;
+  rides_none?: Maybe<RideWhereInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface RideCreateInput {
+  id?: Maybe<ID_Input>;
+  riders: Int;
+  pickUp: String;
+  dropOff: String;
+  price: Int;
+  status: RideStatus;
+}
+
+export interface RideUpdateInput {
+  riders?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  price?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
+}
+
+export interface RideUpdateManyMutationInput {
+  riders?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  price?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
 }
 
 export interface UserCreateInput {
@@ -249,10 +409,16 @@ export interface UserCreateInput {
   password: String;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserCreateroleInput>;
+  rides?: Maybe<RideCreateManyInput>;
+  roles?: Maybe<UserCreaterolesInput>;
 }
 
-export interface UserCreateroleInput {
+export interface RideCreateManyInput {
+  create?: Maybe<RideCreateInput[] | RideCreateInput>;
+  connect?: Maybe<RideWhereUniqueInput[] | RideWhereUniqueInput>;
+}
+
+export interface UserCreaterolesInput {
   set?: Maybe<Role[] | Role>;
 }
 
@@ -264,10 +430,131 @@ export interface UserUpdateInput {
   password?: Maybe<String>;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserUpdateroleInput>;
+  rides?: Maybe<RideUpdateManyInput>;
+  roles?: Maybe<UserUpdaterolesInput>;
 }
 
-export interface UserUpdateroleInput {
+export interface RideUpdateManyInput {
+  create?: Maybe<RideCreateInput[] | RideCreateInput>;
+  update?: Maybe<
+    | RideUpdateWithWhereUniqueNestedInput[]
+    | RideUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | RideUpsertWithWhereUniqueNestedInput[]
+    | RideUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<RideWhereUniqueInput[] | RideWhereUniqueInput>;
+  connect?: Maybe<RideWhereUniqueInput[] | RideWhereUniqueInput>;
+  set?: Maybe<RideWhereUniqueInput[] | RideWhereUniqueInput>;
+  disconnect?: Maybe<RideWhereUniqueInput[] | RideWhereUniqueInput>;
+  deleteMany?: Maybe<RideScalarWhereInput[] | RideScalarWhereInput>;
+  updateMany?: Maybe<
+    RideUpdateManyWithWhereNestedInput[] | RideUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface RideUpdateWithWhereUniqueNestedInput {
+  where: RideWhereUniqueInput;
+  data: RideUpdateDataInput;
+}
+
+export interface RideUpdateDataInput {
+  riders?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  price?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
+}
+
+export interface RideUpsertWithWhereUniqueNestedInput {
+  where: RideWhereUniqueInput;
+  update: RideUpdateDataInput;
+  create: RideCreateInput;
+}
+
+export interface RideScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  riders?: Maybe<Int>;
+  riders_not?: Maybe<Int>;
+  riders_in?: Maybe<Int[] | Int>;
+  riders_not_in?: Maybe<Int[] | Int>;
+  riders_lt?: Maybe<Int>;
+  riders_lte?: Maybe<Int>;
+  riders_gt?: Maybe<Int>;
+  riders_gte?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  pickUp_not?: Maybe<String>;
+  pickUp_in?: Maybe<String[] | String>;
+  pickUp_not_in?: Maybe<String[] | String>;
+  pickUp_lt?: Maybe<String>;
+  pickUp_lte?: Maybe<String>;
+  pickUp_gt?: Maybe<String>;
+  pickUp_gte?: Maybe<String>;
+  pickUp_contains?: Maybe<String>;
+  pickUp_not_contains?: Maybe<String>;
+  pickUp_starts_with?: Maybe<String>;
+  pickUp_not_starts_with?: Maybe<String>;
+  pickUp_ends_with?: Maybe<String>;
+  pickUp_not_ends_with?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  dropOff_not?: Maybe<String>;
+  dropOff_in?: Maybe<String[] | String>;
+  dropOff_not_in?: Maybe<String[] | String>;
+  dropOff_lt?: Maybe<String>;
+  dropOff_lte?: Maybe<String>;
+  dropOff_gt?: Maybe<String>;
+  dropOff_gte?: Maybe<String>;
+  dropOff_contains?: Maybe<String>;
+  dropOff_not_contains?: Maybe<String>;
+  dropOff_starts_with?: Maybe<String>;
+  dropOff_not_starts_with?: Maybe<String>;
+  dropOff_ends_with?: Maybe<String>;
+  dropOff_not_ends_with?: Maybe<String>;
+  price?: Maybe<Int>;
+  price_not?: Maybe<Int>;
+  price_in?: Maybe<Int[] | Int>;
+  price_not_in?: Maybe<Int[] | Int>;
+  price_lt?: Maybe<Int>;
+  price_lte?: Maybe<Int>;
+  price_gt?: Maybe<Int>;
+  price_gte?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
+  status_not?: Maybe<RideStatus>;
+  status_in?: Maybe<RideStatus[] | RideStatus>;
+  status_not_in?: Maybe<RideStatus[] | RideStatus>;
+  AND?: Maybe<RideScalarWhereInput[] | RideScalarWhereInput>;
+  OR?: Maybe<RideScalarWhereInput[] | RideScalarWhereInput>;
+  NOT?: Maybe<RideScalarWhereInput[] | RideScalarWhereInput>;
+}
+
+export interface RideUpdateManyWithWhereNestedInput {
+  where: RideScalarWhereInput;
+  data: RideUpdateManyDataInput;
+}
+
+export interface RideUpdateManyDataInput {
+  riders?: Maybe<Int>;
+  pickUp?: Maybe<String>;
+  dropOff?: Maybe<String>;
+  price?: Maybe<Int>;
+  status?: Maybe<RideStatus>;
+}
+
+export interface UserUpdaterolesInput {
   set?: Maybe<Role[] | Role>;
 }
 
@@ -279,7 +566,18 @@ export interface UserUpdateManyMutationInput {
   password?: Maybe<String>;
   oneTimePin?: Maybe<String>;
   oneTimePinExpiry?: Maybe<DateTimeInput>;
-  role?: Maybe<UserUpdateroleInput>;
+  roles?: Maybe<UserUpdaterolesInput>;
+}
+
+export interface RideSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<RideWhereInput>;
+  AND?: Maybe<RideSubscriptionWhereInput[] | RideSubscriptionWhereInput>;
+  OR?: Maybe<RideSubscriptionWhereInput[] | RideSubscriptionWhereInput>;
+  NOT?: Maybe<RideSubscriptionWhereInput[] | RideSubscriptionWhereInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -297,77 +595,65 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface User {
+export interface Ride {
   id: ID_Output;
-  cell: String;
-  email: String;
-  image?: String;
-  name: String;
-  password: String;
-  oneTimePin?: String;
-  oneTimePinExpiry?: DateTimeOutput;
-  role: Role[];
+  riders: Int;
+  pickUp: String;
+  dropOff: String;
+  price: Int;
+  status: RideStatus;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface RidePromise extends Promise<Ride>, Fragmentable {
   id: () => Promise<ID_Output>;
-  cell: () => Promise<String>;
-  email: () => Promise<String>;
-  image: () => Promise<String>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  oneTimePin: () => Promise<String>;
-  oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  riders: () => Promise<Int>;
+  pickUp: () => Promise<String>;
+  dropOff: () => Promise<String>;
+  price: () => Promise<Int>;
+  status: () => Promise<RideStatus>;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface RideSubscription
+  extends Promise<AsyncIterator<Ride>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  cell: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  image: () => Promise<AsyncIterator<String>>;
-  name: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  oneTimePin: () => Promise<AsyncIterator<String>>;
-  oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
-  role: () => Promise<AsyncIterator<Role[]>>;
+  riders: () => Promise<AsyncIterator<Int>>;
+  pickUp: () => Promise<AsyncIterator<String>>;
+  dropOff: () => Promise<AsyncIterator<String>>;
+  price: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<RideStatus>>;
 }
 
-export interface UserNullablePromise
-  extends Promise<User | null>,
+export interface RideNullablePromise
+  extends Promise<Ride | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  cell: () => Promise<String>;
-  email: () => Promise<String>;
-  image: () => Promise<String>;
-  name: () => Promise<String>;
-  password: () => Promise<String>;
-  oneTimePin: () => Promise<String>;
-  oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  riders: () => Promise<Int>;
+  pickUp: () => Promise<String>;
+  dropOff: () => Promise<String>;
+  price: () => Promise<Int>;
+  status: () => Promise<RideStatus>;
 }
 
-export interface UserConnection {
+export interface RideConnection {
   pageInfo: PageInfo;
-  edges: UserEdge[];
+  edges: RideEdge[];
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface RideConnectionPromise
+  extends Promise<RideConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  edges: <T = FragmentableArray<RideEdge>>() => T;
+  aggregate: <T = AggregateRidePromise>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface RideConnectionSubscription
+  extends Promise<AsyncIterator<RideConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<RideEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateRideSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -391,6 +677,139 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface RideEdge {
+  node: Ride;
+  cursor: String;
+}
+
+export interface RideEdgePromise extends Promise<RideEdge>, Fragmentable {
+  node: <T = RidePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface RideEdgeSubscription
+  extends Promise<AsyncIterator<RideEdge>>,
+    Fragmentable {
+  node: <T = RideSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateRide {
+  count: Int;
+}
+
+export interface AggregateRidePromise
+  extends Promise<AggregateRide>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateRideSubscription
+  extends Promise<AsyncIterator<AggregateRide>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  cell: String;
+  email: String;
+  image?: String;
+  name: String;
+  password: String;
+  oneTimePin?: String;
+  oneTimePinExpiry?: DateTimeOutput;
+  roles: Role[];
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  cell: () => Promise<String>;
+  email: () => Promise<String>;
+  image: () => Promise<String>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  oneTimePin: () => Promise<String>;
+  oneTimePinExpiry: () => Promise<DateTimeOutput>;
+  rides: <T = FragmentableArray<Ride>>(args?: {
+    where?: RideWhereInput;
+    orderBy?: RideOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  roles: () => Promise<Role[]>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  cell: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  image: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  oneTimePin: () => Promise<AsyncIterator<String>>;
+  oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
+  rides: <T = Promise<AsyncIterator<RideSubscription>>>(args?: {
+    where?: RideWhereInput;
+    orderBy?: RideOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  roles: () => Promise<AsyncIterator<Role[]>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  cell: () => Promise<String>;
+  email: () => Promise<String>;
+  image: () => Promise<String>;
+  name: () => Promise<String>;
+  password: () => Promise<String>;
+  oneTimePin: () => Promise<String>;
+  oneTimePinExpiry: () => Promise<DateTimeOutput>;
+  rides: <T = FragmentableArray<Ride>>(args?: {
+    where?: RideWhereInput;
+    orderBy?: RideOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  roles: () => Promise<Role[]>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface UserEdge {
@@ -442,6 +861,62 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
+export interface RideSubscriptionPayload {
+  mutation: MutationType;
+  node: Ride;
+  updatedFields: String[];
+  previousValues: RidePreviousValues;
+}
+
+export interface RideSubscriptionPayloadPromise
+  extends Promise<RideSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = RidePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = RidePreviousValuesPromise>() => T;
+}
+
+export interface RideSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<RideSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = RideSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = RidePreviousValuesSubscription>() => T;
+}
+
+export interface RidePreviousValues {
+  id: ID_Output;
+  riders: Int;
+  pickUp: String;
+  dropOff: String;
+  price: Int;
+  status: RideStatus;
+}
+
+export interface RidePreviousValuesPromise
+  extends Promise<RidePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  riders: () => Promise<Int>;
+  pickUp: () => Promise<String>;
+  dropOff: () => Promise<String>;
+  price: () => Promise<Int>;
+  status: () => Promise<RideStatus>;
+}
+
+export interface RidePreviousValuesSubscription
+  extends Promise<AsyncIterator<RidePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  riders: () => Promise<AsyncIterator<Int>>;
+  pickUp: () => Promise<AsyncIterator<String>>;
+  dropOff: () => Promise<AsyncIterator<String>>;
+  price: () => Promise<AsyncIterator<Int>>;
+  status: () => Promise<AsyncIterator<RideStatus>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -476,7 +951,7 @@ export interface UserPreviousValues {
   password: String;
   oneTimePin?: String;
   oneTimePinExpiry?: DateTimeOutput;
-  role: Role[];
+  roles: Role[];
 }
 
 export interface UserPreviousValuesPromise
@@ -490,7 +965,7 @@ export interface UserPreviousValuesPromise
   password: () => Promise<String>;
   oneTimePin: () => Promise<String>;
   oneTimePinExpiry: () => Promise<DateTimeOutput>;
-  role: () => Promise<Role[]>;
+  roles: () => Promise<Role[]>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -504,7 +979,7 @@ export interface UserPreviousValuesSubscription
   password: () => Promise<AsyncIterator<String>>;
   oneTimePin: () => Promise<AsyncIterator<String>>;
   oneTimePinExpiry: () => Promise<AsyncIterator<DateTimeOutput>>;
-  role: () => Promise<AsyncIterator<Role[]>>;
+  roles: () => Promise<AsyncIterator<Role[]>>;
 }
 
 /*
@@ -514,9 +989,19 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
+*/
+export type Int = number;
+
+/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
 DateTime scalar input type, allowing Date
@@ -528,16 +1013,6 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
 export type Long = string;
 
 /**
@@ -547,6 +1022,14 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Ride",
+    embedded: false
+  },
+  {
+    name: "RideStatus",
     embedded: false
   },
   {

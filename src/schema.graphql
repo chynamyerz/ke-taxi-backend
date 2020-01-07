@@ -5,7 +5,7 @@ type Query {
   """
   Returns the currently logged in user, null if the user is not logged in.
   """
-  user: User
+  user(token: String): User
 
   """
   Returns the list of users regstered.
@@ -28,7 +28,6 @@ type Mutation {
       User's name
     cell:
       User's cell number
-      State (province) zip code
     password:
       User's password
 
@@ -51,6 +50,46 @@ type Mutation {
     User's password
     """
     password: String!
+  ): Token!
+
+  """
+  Sign in a user when valid information provided,
+
+  parameters
+    email:
+      User's email address
+    password:
+      User's current password
+  Returns the SuccessMessage
+  """
+  signin(email: String, password: String!): Token!
+
+  """
+  Updates the user information when valid information provided,
+  The username or an email address should not exist already.
+
+  parameters
+    cell:
+      User's contact number
+    email:
+      User's email address
+    image:
+      User's url for the profile image
+    name:
+      User's name
+    password:
+      User's current password
+    newpassword:
+      User's new password
+  Returns the SuccessMessage
+  """
+  updateUser(
+    cell: String
+    email: String
+    image: String
+    name: String
+    password: String!
+    newPassword: String
   ): User!
 }
 
@@ -60,7 +99,29 @@ type User {
   email: String!
   image: String
   name: String!
-  role: [Role!]!
+  rides: [Ride]
+  roles: [Role!]!
+}
+
+type Ride {
+  id: ID!
+  riders: Int!
+  pickUp: String!
+  dropOff: String!
+  price: Int!
+  status: RideStatus!
+}
+
+type Token {
+  token: String!
+}
+
+enum RideStatus {
+  REQUESTED
+  ACCEPTED
+  RIDING
+  DECLINED
+  CANCELLED
 }
 
 enum Role {
